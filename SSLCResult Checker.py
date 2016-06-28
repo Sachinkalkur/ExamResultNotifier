@@ -7,6 +7,30 @@ import time
 import sys
 
 
+def send_sms(message):
+    username = 'xxx' # Enter Username/Mobile Number
+    passwd = 'xxx' # Enter the Way2SMS Password
+    message = message
+    number = '9767972720' # Enter the Phone Number to send
+    message = "+".join(message.split(' '))
+
+    # Logging into the SMS Site
+    url = 'http://site24.way2sms.com/Login1.action?'
+    data = 'username='+username+'&password='+passwd+'&Submit=Sign+in'
+
+    # For Cookies:
+    cj = cookielib.CookieJar()
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+
+    # Adding Header detail:
+    opener.addheaders = [('User-Agent','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36')]
+
+    try:
+        usock = opener.open(url, data)
+    except IOError:
+        print "Error while logging in."
+        sys.exit(1)
+
     jession_id = str(cj).split('~')[1].split(' ')[0]
     send_sms_url = 'http://site24.way2sms.com/smstoss.action?'
     send_sms_data = 'ssaction=ss&Token='+jession_id+'&mobile='+number+'&message='+message+'&msgLen=136'
@@ -36,6 +60,7 @@ while True:
             second_match = re.findall(second_string, str(links))
             print second_match
             if second_match == []:
+                send_sms("Results have been Announced please Check")
                 sys.exit(1)
             else:
                 print "Rechecking in 15 minutes.............."
